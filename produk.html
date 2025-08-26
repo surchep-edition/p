@@ -1,0 +1,425 @@
+<!-- produk.html -->
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Produk — Saldoku</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body{
+      background: linear-gradient(180deg,#020617,#071033 60%, #041028);
+      color:#e6eef8;
+      min-height:100vh;
+    }
+    .glass{ background: rgba(255,255,255,0.03); backdrop-filter: blur(6px); }
+    .tab-active { display: block; }
+    .tab-hidden { display: none; }
+    .nav-tab { cursor:pointer; }
+    .card-hover:hover{ transform: translateY(-6px); box-shadow: 0 14px 40px rgba(2,6,23,0.6); }
+    .kbd { font-family: ui-monospace,SFMono-Regular,Menlo,monospace; background:#0b1220; padding:2px 6px; border-radius:6px; }
+  </style>
+</head>
+<body class="font-sans">
+
+  <!-- Navbar -->
+  <header class="fixed top-0 left-0 right-0 z-50">
+    <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between glass">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center font-bold">PP</div>
+        <div>
+          <div class="text-lg font-extrabold">Saldoku</div>
+          <div class="text-xs text-gray-300">Produk & Layanan</div>
+        </div>
+      </div>
+      <div class="hidden md:flex items-center gap-6">
+        <a href="index.html" class="text-sm hover:text-white">Home</a>
+        <a href="produk.html" class="text-sm hover:text-white">Produk</a>
+        <a href="rate.html" class="text-sm hover:text-white">Rate</a>
+        <a href="faq.html" class="text-sm hover:text-white">FAQ</a>
+        <a href="kontak.html" class="text-sm hover:text-white">Kontak</a>
+        <a href="dashboard.html" class="px-3 py-2 rounded bg-yellow-500 text-black font-semibold">Dashboard</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="pt-24 max-w-6xl mx-auto px-4 pb-24">
+
+    <section class="mb-8">
+      <h1 class="text-3xl font-bold mb-2">Produk & Layanan</h1>
+      <p class="text-gray-300">Pilih layanan di bawah untuk memulai order. Semua transaksi diarahkan ke WhatsApp untuk konfirmasi.</p>
+    </section>
+
+    <!-- Tabs -->
+    <section class="mb-6">
+      <div class="flex gap-3 flex-wrap">
+        <button class="nav-tab px-4 py-2 glass rounded-lg shadow-sm" data-tab="convert">Convert PayPal</button>
+        <button class="nav-tab px-4 py-2 glass rounded-lg shadow-sm" data-tab="topup-dana">Topup Dana</button>
+        <button class="nav-tab px-4 py-2 glass rounded-lg shadow-sm" data-tab="topup-pulsa">Topup Pulsa</button>
+        <button class="nav-tab px-4 py-2 glass rounded-lg shadow-sm" data-tab="topup-gopay">Topup GoPay</button>
+        <button class="nav-tab px-4 py-2 glass rounded-lg shadow-sm" data-tab="topup-ff">Topup Free Fire</button>
+      </div>
+    </section>
+
+    <!-- TAB CONTENTS -->
+    <section id="tab-contents">
+
+      <!-- Convert PayPal -->
+      <div id="convert" class="tab-active glass p-6 rounded-xl mb-6">
+        <h2 class="text-xl font-bold mb-3">Convert PayPal → Ewallet / Transfer Bank</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs text-gray-300">Email PayPal (penerima)</label>
+            <input id="conv_email" class="w-full mt-2 p-3 rounded bg-slate-900 text-white" placeholder="contoh: yourpaypal@email.com"/>
+
+            <label class="text-xs text-gray-300 mt-3">Jumlah (USD) — minimal 2$</label>
+            <input id="conv_usd" type="number" min="2" step="0.01" value="2" class="w-full mt-2 p-3 rounded bg-slate-900 text-white" />
+
+            <label class="text-xs text-gray-300 mt-3">Pencairan</label>
+            <select id="conv_method" class="w-full mt-2 p-3 rounded bg-slate-900 text-white">
+              <option> Dana </option>
+              <option> OVO </option>
+              <option> GoPay </option>
+              <option> Transfer Bank </option>
+            </select>
+
+            <label class="text-xs text-gray-300 mt-3">Nomor / Rekening (tujuan)</label>
+            <input id="conv_target" class="w-full mt-2 p-3 rounded bg-slate-900 text-white" placeholder="Masukkan nomor ewallet atau nomor rekening" />
+
+            <div class="mt-4">
+              <div class="text-sm text-gray-300">Estimasi Terima (IDR)</div>
+              <div id="conv_est" class="text-lg font-semibold mt-1">Rp 27.000</div>
+            </div>
+
+            <div class="flex gap-3 mt-4">
+              <button id="conv_submit" class="flex-1 bg-yellow-500 text-black px-4 py-2 rounded-lg hover:scale-105 transition">Proses via WhatsApp</button>
+              <button id="conv_copy" class="px-4 py-2 rounded-lg border border-gray-700">Salin Pesan</button>
+            </div>
+          </div>
+
+          <div class="p-4 bg-slate-900 rounded-lg">
+            <h3 class="font-semibold mb-2">Petunjuk</h3>
+            <ol class="text-sm text-gray-300 list-decimal list-inside space-y-2">
+              <li>Transfer saldo PayPal ke <span id="conv_display_email" class="kbd">yourpaypal@email.com</span>.</li>
+              <li>Setelah transfer, klik <strong>Proses via WhatsApp</strong> untuk mengirim pesan konfirmasi.</li>
+              <li>Tim kami akan memverifikasi & memproses pencairan.</li>
+            </ol>
+            <hr class="my-3 border-gray-800" />
+            <div class="text-sm text-gray-400">Catatan keamanan: Verifikasi IPN/Webhook disarankan apabila Anda menerima banyak order otomatis.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Topup Dana -->
+      <div id="topup-dana" class="tab-hidden glass p-6 rounded-xl mb-6">
+        <h2 class="text-xl font-bold mb-3">Topup Dana via PayPal</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs text-gray-300">Jumlah (USD) — minimal 2$</label>
+            <input id="dana_usd" type="number" min="2" step="0.01" class="w-full mt-2 p-3 rounded bg-slate-900 text-white" />
+            <label class="text-xs text-gray-300 mt-3">Nomor Dana</label>
+            <input id="dana_no" class="w-full mt-2 p-3 rounded bg-slate-900 text-white" placeholder="08xxxxxx" />
+            <div class="mt-4">
+              <div class="text-sm text-gray-300">Estimasi Terima (IDR)</div>
+              <div id="dana_est" class="text-lg font-semibold mt-1">Rp 0</div>
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button onclick="sendWA('Dana')" class="flex-1 bg-blue-600 text-black px-4 py-2 rounded-lg hover:scale-105 transition">Topup via WhatsApp</button>
+              <button id="dana_copy" class="px-4 py-2 rounded-lg border border-gray-700">Salin</button>
+            </div>
+          </div>
+          <div class="p-4 bg-slate-900 rounded-lg">
+            <p class="text-sm text-gray-300">Topup Dana cepat & otomatis setelah kami verifikasi pembayaran PayPal Anda.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Topup Pulsa -->
+      <div id="topup-pulsa" class="tab-hidden glass p-6 rounded-xl mb-6">
+        <h2 class="text-xl font-bold mb-3">Topup Pulsa via PayPal</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs text-gray-300">Nomor HP</label>
+            <input id="pulsa_no" class="w-full mt-2 p-3 rounded bg-slate-900 text-white" placeholder="08xxxxxxx" />
+            <label class="text-xs text-gray-300 mt-3">Jumlah (USD) — minimal 2$</label>
+            <input id="pulsa_usd" type="number" min="2" step="0.01" class="w-full mt-2 p-3 rounded bg-slate-900 text-white" />
+            <div class="mt-4">
+              <div class="text-sm text-gray-300">Estimasi Terima (IDR)</div>
+              <div id="pulsa_est" class="text-lg font-semibold mt-1">Rp 0</div>
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button onclick="sendWA('Pulsa')" class="flex-1 bg-yellow-600 text-black px-4 py-2 rounded-lg hover:scale-105 transition">Topup via WhatsApp</button>
+              <button id="pulsa_copy" class="px-4 py-2 rounded-lg border border-gray-700">Salin</button>
+            </div>
+          </div>
+          <div class="p-4 bg-slate-900 rounded-lg">
+            <p class="text-sm text-gray-300">Isi pulsa semua operator. Pastikan nomor benar sebelum konfirmasi.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Topup GoPay -->
+      <div id="topup-gopay" class="tab-hidden glass p-6 rounded-xl mb-6">
+        <h2 class="text-xl font-bold mb-3">Topup GoPay via PayPal</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs text-gray-300">Jumlah (USD) — minimal 2$</label>
+            <input id="gopay_usd" type="number" min="2" step="0.01" class="w-full mt-2 p-3 rounded bg-slate-900 text-white" />
+            <label class="text-xs text-gray-300 mt-3">Nomor GoPay</label>
+            <input id="gopay_no" class="w-full mt-2 p-3 rounded bg-slate-900 text-white" placeholder="08xxxxxxx" />
+            <div class="mt-4">
+              <div class="text-sm text-gray-300">Estimasi Terima (IDR)</div>
+              <div id="gopay_est" class="text-lg font-semibold mt-1">Rp 0</div>
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button onclick="sendWA('GoPay')" class="flex-1 bg-teal-500 text-black px-4 py-2 rounded-lg hover:scale-105 transition">Topup via WhatsApp</button>
+              <button id="gopay_copy" class="px-4 py-2 rounded-lg border border-gray-700">Salin</button>
+            </div>
+          </div>
+          <div class="p-4 bg-slate-900 rounded-lg">
+            <p class="text-sm text-gray-300">Topup GoPay cepat setelah verifikasi pembayaran PayPal.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Topup Free Fire -->
+      <div id="topup-ff" class="tab-hidden glass p-6 rounded-xl mb-6">
+        <h2 class="text-xl font-bold mb-3">Topup Free Fire via PayPal</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs text-gray-300">User ID Free Fire</label>
+            <input id="ff_id" class="w-full mt-2 p-3 rounded bg-slate-900 text-white" placeholder="Masukkan User ID/UID" />
+            <label class="text-xs text-gray-300 mt-3">Jumlah USD — minimal 2$</label>
+            <input id="ff_usd" type="number" min="2" step="0.01" class="w-full mt-2 p-3 rounded bg-slate-900 text-white" />
+            <div class="mt-4">
+              <div class="text-sm text-gray-300">Estimasi Terima (IDR)</div>
+              <div id="ff_est" class="text-lg font-semibold mt-1">Rp 0</div>
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button onclick="sendWA('Free Fire')" class="flex-1 bg-red-600 text-black px-4 py-2 rounded-lg hover:scale-105 transition">Topup via WhatsApp</button>
+              <button id="ff_copy" class="px-4 py-2 rounded-lg border border-gray-700">Salin</button>
+            </div>
+          </div>
+          <div class="p-4 bg-slate-900 rounded-lg">
+            <p class="text-sm text-gray-300">Isi user ID Free Fire dan nominal, kami akan proses topup diamond sesuai pesanan.</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <footer class="mt-8 text-sm text-gray-400">
+      <div>Pastikan transfer PayPal ke email yang tertera. Minimal transaksi disarankan 2 USD. Hubungi kami jika ada kendala.</div>
+    </footer>
+  </main>
+
+  <!-- SCRIPT: ganti PAYPAL_EMAIL, WA_PHONE, RATE sesuai kebutuhan -->
+  <script>
+    // Konfigurasi — ganti di sini
+    const PAYPAL_EMAIL = "yourpaypal@email.com";  // <-- ganti
+    const WA_PHONE = "6281232715307";             // <-- ganti, format internasional tanpa +
+    const RATE = 13500;                           // <-- 1 USD = RATE IDR
+
+    // Utility: format rupiah
+    function rupiah(n){ return 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.round(n)); }
+
+    // Prefill displays
+    document.getElementById('conv_display_email').textContent = PAYPAL_EMAIL;
+    document.getElementById('conv_email').value = PAYPAL_EMAIL;
+
+    // Tabs logic
+    document.querySelectorAll('.nav-tab').forEach(btn=>{
+      btn.addEventListener('click', ()=> {
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('#tab-contents > div').forEach(d => d.classList.add('tab-hidden'));
+        const el = document.getElementById(tab);
+        if(el) el.classList.remove('tab-hidden');
+        // scroll to top of tab contents smoothly
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    });
+
+    // Convert estimate
+    const convUsd = document.getElementById('conv_usd');
+    const convEst = document.getElementById('conv_est');
+    function updateConv(){ const usd = parseFloat(convUsd.value) || 0; convEst.textContent = usd>=2 ? rupiah(usd*RATE) : 'Minimal 2 USD'; }
+    convUsd.addEventListener('input', updateConv); updateConv();
+
+    // Dana estimate
+    const danaUsd = document.getElementById('dana_usd'), danaEst = document.getElementById('dana_est');
+    danaUsd?.addEventListener('input', ()=> { const v=parseFloat(danaUsd.value)||0; danaEst.textContent = v>=2 ? rupiah(v*RATE) : 'Minimal 2 USD'; });
+
+    // Pulsa estimate
+    const pulsaUsd = document.getElementById('pulsa_usd'), pulsaEst = document.getElementById('pulsa_est');
+    pulsaUsd?.addEventListener('input', ()=> { const v=parseFloat(pulsaUsd.value)||0; pulsaEst.textContent = v>=2 ? rupiah(v*RATE) : 'Minimal 2 USD'; });
+
+    // GoPay estimate
+    const gopayUsd = document.getElementById('gopay_usd'), gopayEst = document.getElementById('gopay_est');
+    gopayUsd?.addEventListener('input', ()=> { const v=parseFloat(gopayUsd.value)||0; gopayEst.textContent = v>=2 ? rupiah(v*RATE) : 'Minimal 2 USD'; });
+
+    // FF estimate
+    const ffUsd = document.getElementById('ff_usd'), ffEst = document.getElementById('ff_est');
+    ffUsd?.addEventListener('input', ()=> { const v=parseFloat(ffUsd.value)||0; ffEst.textContent = v>=2 ? rupiah(v*RATE) : 'Minimal 2 USD'; });
+
+    // General WA builder & validators
+    function mkTRX(){ return 'PP' + Math.random().toString(36).substr(2,8).toUpperCase(); }
+
+    // Convert actions
+    document.getElementById('conv_submit').addEventListener('click', ()=>{
+      const email = (document.getElementById('conv_email').value || PAYPAL_EMAIL).trim();
+      const usd = parseFloat(document.getElementById('conv_usd').value) || 0;
+      const method = document.getElementById('conv_method').value;
+      const target = document.getElementById('conv_target').value.trim() || '-';
+      if(usd < 2) return alert('Minimal 2 USD');
+      const idr = Math.round(usd * RATE);
+      const trx = mkTRX();
+      const msg = [
+        'Halo KA, saya mau mencairkan saldo PayPal.',
+        Kode TRX: ${trx},
+        Email PayPal: ${email},
+        Jumlah: $${usd.toFixed(2)} (≈ ${rupiah(idr)}),
+        Tujuan: ${method},
+        Tujuan No/Rek: ${target},
+        '',
+        'Mohon proses ya, terima kasih.'
+      ].join('\\n');
+      window.open(https://wa.me/${WA_PHONE}?text=${encodeURIComponent(msg)},'_blank');
+    });
+
+    document.getElementById('conv_copy').addEventListener('click', ()=>{
+      const email = (document.getElementById('conv_email').value || PAYPAL_EMAIL).trim();
+      const usd = parseFloat(document.getElementById('conv_usd').value) || 0;
+      if(usd < 2) return alert('Minimal 2 USD');
+      const idr = Math.round(usd * RATE);
+      const trx = mkTRX();
+      const msg = [
+        'Halo KA, saya mau mencairkan saldo PayPal.',
+        Kode TRX: ${trx},
+        Email PayPal: ${email},
+        Jumlah: $${usd.toFixed(2)} (≈ ${rupiah(idr)}),
+      ].join('\\n');
+      navigator.clipboard?.writeText(msg).then(()=> alert('Pesan disalin ke clipboard')).catch(()=> prompt('Salin pesan manual:', msg));
+    });
+
+    // Generic sender for others
+    function sendWA(type){
+      let usd=0, idr=0, msg='', extra='';
+      if(type==='Dana'){
+        usd = parseFloat(document.getElementById('dana_usd').value) || 0;
+        if(usd<2) return alert('Minimal 2 USD');
+        idr = Math.round(usd*RATE);
+        const no = document.getElementById('dana_no').value || '-';
+        msg = [
+          'Topup Dana via PayPal',
+          Kode TRX: ${mkTRX()},
+          Jumlah: $${usd.toFixed(2)} (≈ ${rupiah(idr)}),
+          No Dana: ${no}
+        ].join('\\n');
+      }
+      if(type==='Pulsa'){
+        usd = parseFloat(document.getElementById('pulsa_usd').value) || 0;
+        if(usd<2) return alert('Minimal 2 USD');
+        idr = Math.round(usd*RATE);
+        const no = document.getElementById('pulsa_no').value || '-';
+        msg = [
+          'Topup Pulsa via PayPal',
+          Kode TRX: ${mkTRX()},
+          Nomor: ${no},
+          Jumlah: $${usd.toFixed(2)} (≈ ${rupiah(idr)})
+        ].join('\\n');
+      }
+      if(type==='GoPay'){
+        usd = parseFloat(document.getElementById('gopay_usd').value) || 0;
+        if(usd<2) return alert('Minimal 2 USD');
+        idr = Math.round(usd*RATE);
+        const no = document.getElementById('gopay_no').value || '-';
+        msg = [
+          'Topup GoPay via PayPal',
+          Kode TRX: ${mkTRX()},
+          No GoPay: ${no},
+          Jumlah: $${usd.toFixed(2)} (≈ ${rupiah(idr)})
+        ].join('\\n');
+      }
+      if(type==='Free Fire'){
+        usd = parseFloat(document.getElementById('ff_usd').value) || 0;
+        if(usd<2) return alert('Minimal 2 USD');
+        idr = Math.round(usd*RATE);
+        const uid = document.getElementById('ff_id').value || '-';
+        msg = [
+          'Topup Free Fire via PayPal',
+          Kode TRX: ${mkTRX()},
+          UserID: ${uid},
+          Jumlah: $${usd.toFixed(2)} (≈ ${rupiah(idr)})
+        ].join('\\n');
+      }
+      window.open(https://wa.me/${WA_PHONE}?text=${encodeURIComponent(msg)},'_blank');
+    }
+
+    // Copy helpers for other tabs
+    document.getElementById('dana_copy')?.addEventListener('click', ()=>{
+      const usd = parseFloat(document.getElementById('dana_usd').value)||0;
+      if(usd<2) return alert('Minimal 2 USD');
+      const idr = Math.round(usd*RATE);
+      const msg = Topup Dana via PayPal\\nJumlah: $${usd.toFixed(2)} (≈ ${rupiah(idr)});
+      navigator.clipboard?.writeText(msg).then(()=> alert('Pesan disalin')).catch(()=> prompt('Salin pesan manual:', msg));
+    });
+    document.getElementById('pulsa_copy')?.addEventListener('click', ()=>{
+      const usd = parseFloat(document.getElementById('pulsa_usd').value)||0;
+      if(usd<2) return alert('Minimal 2 USD');
+      const idr = Math.round(usd*RATE);
+      const no = document.getElementById('pulsa_no').value||'-';
+      const msg = Topup Pulsa via PayPal\\nNomor: ${no}\\nJumlah: $${usd.toFixed(2)} (≈ ${rupiah(idr)});
+      navigator.clipboard?.writeText(msg).then(()=> alert('Pesan disalin')).catch(()=> prompt('Salin pesan manual:', msg));
+    });
+    document.getElementById('gopay_copy')?.addEventListener('click', ()=>{
+      const usd = parseFloat(document.getElementById('gopay_usd').value)||0;
+      if(usd<2) return alert('Minimal 2 USD');
+      const idr = Math.round(usd*RATE);
+      const no = document.getElementById('gopay_no').value||'-';
+      const msg = Topup GoPay via PayPal\\nNo: ${no}\\nJumlah: $${usd.toFixed(2)} (≈ ${rupiah(idr)});
+      navigator.clipboard?.writeText(msg).then(()=> alert('Pesan disalin')).catch(()=> prompt('Salin pesan manual:', msg));
+    });
+    document.getElementById('ff_copy')?.addEventListener('click', ()=>{
+      const usd = parseFloat(document.getElementById('ff_usd').value)||0;
+      if(usd<2) return alert('Minimal 2 USD');
+      const idr = Math.round(usd*RATE);
+      const uid = document.getElementById('ff_id').value||'-';
+      const msg = Topup Free Fire via PayPal\\nUserID: ${uid}\\nJumlah: $${usd.toFixed(2)} (≈ ${rupiah(idr)});
+      navigator.clipboard?.writeText(msg).then(()=> alert('Pesan disalin')).catch(()=> prompt('Salin pesan manual:', msg));
+    });
+
+    // Allow pre-fill via query string ?service=convert&usd=5&method=Dana&email=...
+    (function prefillFromQS(){
+      const qs = new URLSearchParams(window.location.search);
+      const service = qs.get('service');
+      const usd = qs.get('usd');
+      const method = qs.get('method');
+      const email = qs.get('email');
+      if(email) { document.getElementById('conv_email').value = email; document.getElementById('conv_display_email').textContent = email; }
+      if(usd){
+        const inputs = ['conv_usd','dana_usd','pulsa_usd','gopay_usd','ff_usd'];
+        inputs.forEach(id=>{ const el=document.getElementById(id); if(el) el.value = usd; });
+        updateConv();
+        danaUsd?.dispatchEvent(new Event('input'));
+        pulsaUsd?.dispatchEvent(new Event('input'));
+        gopayUsd?.dispatchEvent(new Event('input'));
+        ffUsd?.dispatchEvent(new Event('input'));
+      }
+      if(method && service==='convert'){
+        document.getElementById('conv_method').value = method;
+      }
+      if(service){
+        // switch tab to service (simple mapping)
+        const map = { 'convert':'convert', 'dana':'topup-dana', 'pulsa':'topup-pulsa', 'gopay':'topup-gopay', 'ff':'topup-ff' };
+        const tabId = map[service];
+        if(tabId){
+          document.querySelectorAll('#tab-contents > div').forEach(d => d.classList.add('tab-hidden'));
+          document.getElementById(tabId)?.classList.remove('tab-hidden');
+          document.getElementById(tabId)?.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      }
+    })();
+
+  </script>
+</body>
+</html>
