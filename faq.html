@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rate & Harga - Saldoku</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-r from-black via-gray-900 to-black text-white">
+  <!-- Navbar -->
+  <nav class="fixed top-0 left-0 w-full bg-black/70 backdrop-blur-md p-4 flex justify-between items-center z-50">
+    <h1 class="text-xl font-bold text-yellow-400">Saldoku</h1>
+    <div class="space-x-4">
+      <a href="index.html" class="hover:text-yellow-400">Home</a>
+      <a href="produk.html" class="hover:text-yellow-400">Produk</a>
+      <a href="rate.html" class="text-yellow-400 font-bold">Rate</a>
+      <a href="faq.html" class="hover:text-yellow-400">FAQ</a>
+      <a href="kontak.html" class="hover:text-yellow-400">Kontak</a>
+      <a href="dashboard.html" class="bg-yellow-500 px-3 py-1 rounded-lg text-black font-bold hover:bg-yellow-400">Dashboard</a>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="pt-24 pb-12 max-w-5xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center text-yellow-400 mb-8">Rate & Harga</h2>
+
+    <!-- Kurs Paypal -->
+    <section data-aos="fade-up" class="bg-gray-800 p-6 rounded-2xl shadow-lg mb-10">
+      <h3 class="text-2xl font-bold mb-4 text-yellow-300">Kurs PayPal Hari Ini</h3>
+      <p class="text-lg">1 USD = <span class="font-bold text-yellow-400">Rp 13.500</span></p>
+      <p class="text-sm text-gray-400">*Minimum withdraw 2 USD</p>
+    </section>
+
+    <!-- Tabel Harga Topup -->
+    <section data-aos="fade-up" class="bg-gray-800 p-6 rounded-2xl shadow-lg">
+      <h3 class="text-2xl font-bold mb-4 text-yellow-300">Daftar Harga Topup</h3>
+      <div class="overflow-x-auto">
+        <table class="table-auto w-full text-left border border-gray-700">
+          <thead>
+            <tr class="bg-yellow-500 text-black">
+              <th class="px-4 py-2">Layanan</th>
+              <th class="px-4 py-2">Nominal (USD)</th>
+              <th class="px-4 py-2">Harga (IDR)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Pulsa -->
+            <tr class="border-t border-gray-700">
+              <td class="px-4 py-2">Topup Pulsa</td>
+              <td class="px-4 py-2">2 USD</td>
+              <td class="px-4 py-2">Rp 27.000</td>
+            </tr>
+            <tr class="border-t border-gray-700">
+              <td class="px-4 py-2">Topup Pulsa</td>
+              <td class="px-4 py-2">5 USD</td>
+              <td class="px-4 py-2">Rp 67.500</td>
+            </tr>
+            <tr class="border-t border-gray-700">
+              <td class="px-4 py-2">Topup Pulsa</td>
+              <td class="px-4 py-2">10 USD</td>
+              <td class="px-4 py-2">Rp 135.000</td>
+            </tr>
+            <!-- GoPay -->
+            <tr class="border-t border-gray-700">
+              <td class="px-4 py-2">Topup GoPay</td>
+              <td class="px-4 py-2">5 USD</td>
+              <td class="px-4 py-2">Rp 67.500</td>
+            </tr>
+            <tr class="border-t border-gray-700">
+              <td class="px-4 py-2">Topup GoPay</td>
+              <td class="px-4 py-2">10 USD</td>
+              <td class="px-4 py-2">Rp 135.000</td>
+            </tr>
+            <!-- Free Fire -->
+            <tr class="border-t border-gray-700">
+              <td class="px-4 py-2">Topup Free Fire</td>
+              <td class="px-4 py-2">2 USD</td>
+              <td class="px-4 py-2">Rp 27.000</td>
+            </tr>
+            <tr class="border-t border-gray-700">
+              <td class="px-4 py-2">Topup Free Fire</td>
+              <td class="px-4 py-2">5 USD</td>
+              <td class="px-4 py-2">Rp 67.500</td>
+            </tr>
+            <tr class="border-t border-gray-700">
+              <td class="px-4 py-2">Topup Free Fire</td>
+              <td class="px-4 py-2">10 USD</td>
+              <td class="px-4 py-2">Rp 135.000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    AOS.init();
+  </script>
+</body>
+</html>
