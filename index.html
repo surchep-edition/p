@@ -20,42 +20,21 @@
   </nav>
 
   <!-- Hero -->
-  <section class="text-center py-20">
-    <h2 class="text-4xl font-bold text-yellow-400 mb-4">Convert Saldo PayPal ke Dana, OVO, GoPay & Bank</h2>
-    <p class="text-gray-300">Mudah, cepat, aman, dan kurs terbaik. Minimal $2</p>
-  </section>
+  <section class="py-16 text-center">
+    <h2 class="text-3xl font-bold mb-6 text-yellow-400">Convert Saldo PayPal ke Dana, OVO, GoPay, atau Bank</h2>
+    <p class="mb-4">Silakan transfer saldo ke email PayPal berikut:</p>
+    <p class="text-xl font-bold text-green-400 mb-8">styzenstore@gmail.com</p>
 
-  <!-- Info Email PayPal -->
-  <section class="py-6 flex justify-center">
-    <div class="bg-gray-800 p-6 rounded-xl shadow-lg max-w-lg w-full text-center">
-      <h3 class="text-xl font-bold text-yellow-400 mb-2">Email PayPal Tujuan Transfer</h3>
-      <p class="text-lg text-white">styzenstore@gmail.com</p>
-      <p class="text-gray-400 text-sm mt-2">Silakan kirim saldo PayPal ke email di atas sebelum melakukan konfirmasi.</p>
-    </div>
-  </section>
-
-  <!-- Form Convert -->
-  <section class="py-10 flex justify-center">
-    <div class="bg-gray-800 p-6 rounded-xl max-w-lg w-full shadow-lg">
+    <div class="max-w-2xl mx-auto bg-gray-800 p-6 rounded-xl shadow-xl">
       <form id="convertForm">
+
         <!-- Email Pengirim -->
-        <label class="block mb-2 text-gray-300 text-left">Email PayPal Anda (Pengirim)</label>
+        <label class="block mb-2 text-gray-300 text-left">Email PayPal Anda</label>
         <input type="email" id="email" required class="w-full p-2 mb-4 rounded-lg bg-gray-700 text-white">
 
-        <!-- Pilih Tujuan -->
-        <label class="block mb-2 text-gray-300 text-left">Pilih Tujuan</label>
-        <select id="tujuan" class="w-full p-2 mb-4 rounded-lg bg-gray-700 text-white">
-          <option value="Dana">Dana</option>
-          <option value="OVO">OVO</option>
-          <option value="GoPay">GoPay</option>
-          <option value="Bank">Transfer Bank</option>
-        </select>
-
-        <!-- Rekening Bank (hanya muncul jika Bank dipilih) -->
-        <div id="bankField" class="hidden">
-          <label class="block mb-2 text-gray-300 text-left">Nomor Rekening Bank</label>
-          <input type="text" id="rekening" placeholder="Masukkan nomor rekening" class="w-full p-2 mb-4 rounded-lg bg-gray-700 text-white">
-        </div>
+        <!-- Rekening Penerima -->
+        <label class="block mb-2 text-gray-300 text-left">Rekening Bank / E-wallet Tujuan</label>
+        <input type="text" id="rekening" placeholder="Contoh: BCA 123456 a/n Nama" required class="w-full p-2 mb-4 rounded-lg bg-gray-700 text-white">
 
         <!-- Jumlah Dollar -->
         <label class="block mb-2 text-gray-300 text-left">Jumlah Dollar ($)</label>
@@ -66,28 +45,19 @@
 
         <!-- Tombol -->
         <button type="submit" class="w-full py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-lg">
-          Convert & Konfirmasi
+          Konfirmasi via WhatsApp
         </button>
       </form>
     </div>
   </section>
 
   <script>
-    const rate = 13500; // kurs per $ (1 USD = Rp13.500)
+    // Tentukan kurs disini
+    const rate = 13500; // 1 USD = Rp13.500
+
     const dollarInput = document.getElementById("dollar");
     const hasil = document.getElementById("hasil");
     const form = document.getElementById("convertForm");
-    const tujuanSelect = document.getElementById("tujuan");
-    const bankField = document.getElementById("bankField");
-
-    // tampilkan field rekening jika pilih Bank
-    tujuanSelect.addEventListener("change", function() {
-      if (tujuanSelect.value === "Bank") {
-        bankField.classList.remove("hidden");
-      } else {
-        bankField.classList.add("hidden");
-      }
-    });
 
     function hitung() {
       let dollar = parseFloat(dollarInput.value);
@@ -104,9 +74,8 @@
     form.addEventListener("submit", function(e) {
       e.preventDefault();
       let email = document.getElementById("email").value;
-      let tujuan = tujuanSelect.value;
-      let dollar = parseFloat(dollarInput.value);
       let rekening = document.getElementById("rekening").value;
+      let dollar = parseFloat(dollarInput.value);
 
       if (dollar < 2) {
         alert("Minimal $2");
@@ -114,17 +83,14 @@
       }
 
       let rupiah = dollar * rate;
-      let pesan = Halo kak, saya mau convert saldo PayPal.\n\nEmail PayPal Pengirim: ${email}\nJumlah: $${dollar} = Rp${rupiah.toLocaleString("id-ID")}\nTujuan: ${tujuan};
-
-      if (tujuan === "Bank") {
-        pesan += \nNomor Rekening: ${rekening};
-      }
-
-      pesan += \n\nSaya sudah kirim ke PayPal: styzenstore@gmail.com;
-
+      let pesan = Halo kak, saya mau mencairkan saldo PayPal.\n\nEmail PayPal: ${email}\nTujuan: ${rekening}\nJumlah: $${dollar} = Rp${rupiah.toLocaleString("id-ID")}\n\nSudah saya transfer ke styzenstore@gmail.com;
       let waLink = https://wa.me/6281232715307?text=${encodeURIComponent(pesan)};
+
       window.open(waLink, "_blank");
     });
+
+    // Inisialisasi saat pertama kali load
+    hitung();
   </script>
 </body>
 </html>
