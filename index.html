@@ -32,9 +32,20 @@
         <label class="block mb-2 text-gray-300 text-left">Email PayPal Anda</label>
         <input type="email" id="email" required class="w-full p-2 mb-4 rounded-lg bg-gray-700 text-white">
 
-        <!-- Rekening Penerima -->
-        <label class="block mb-2 text-gray-300 text-left">Rekening Bank / E-wallet Tujuan</label>
-        <input type="text" id="rekening" placeholder="Contoh: BCA 123456 a/n Nama" required class="w-full p-2 mb-4 rounded-lg bg-gray-700 text-white">
+        <!-- Pilihan Tujuan -->
+        <label class="block mb-2 text-gray-300 text-left">Pilih Tujuan Pencairan</label>
+        <select id="tujuan" required class="w-full p-2 mb-4 rounded-lg bg-gray-700 text-white">
+          <option value="">-- Pilih Tujuan --</option>
+          <option value="Dana">Dana</option>
+          <option value="OVO">OVO</option>
+          <option value="GoPay">GoPay</option>
+          <option value="BCA">Bank BCA</option>
+          <option value="BRI">Bank BRI</option>
+          <option value="Mandiri">Bank Mandiri</option>
+        </select>
+
+        <!-- Input tambahan (nomor rekening / nomor ewallet) -->
+        <div id="inputTujuan"></div>
 
         <!-- Jumlah Dollar -->
         <label class="block mb-2 text-gray-300 text-left">Jumlah Dollar ($)</label>
@@ -52,12 +63,13 @@
   </section>
 
   <script>
-    // Tentukan kurs disini
+    // Kurs
     const rate = 13500; // 1 USD = Rp13.500
-
     const dollarInput = document.getElementById("dollar");
     const hasil = document.getElementById("hasil");
     const form = document.getElementById("convertForm");
+    const tujuanSelect = document.getElementById("tujuan");
+    const inputTujuan = document.getElementById("inputTujuan");
 
     function hitung() {
       let dollar = parseFloat(dollarInput.value);
@@ -71,10 +83,29 @@
 
     dollarInput.addEventListener("input", hitung);
 
+    // Ganti input sesuai tujuan
+    tujuanSelect.addEventListener("change", function() {
+      let val = tujuanSelect.value;
+      if (val === "Dana" || val === "OVO" || val === "GoPay") {
+        inputTujuan.innerHTML = `
+          <label class="block mb-2 text-gray-300 text-left">Nomor ${val}</label>
+          <input type="text" id="rekening" placeholder="08xxxxxxxx" required class="w-full p-2 mb-4 rounded-lg bg-gray-700 text-white">
+        `;
+      } else if (val === "BCA" || val === "BRI" || val === "Mandiri") {
+        inputTujuan.innerHTML = `
+          <label class="block mb-2 text-gray-300 text-left">Nomor Rekening ${val}</label>
+          <input type="text" id="rekening" placeholder="1234567890" required class="w-full p-2 mb-4 rounded-lg bg-gray-700 text-white">
+        `;
+      } else {
+        inputTujuan.innerHTML = "";
+      }
+    });
+
     form.addEventListener("submit", function(e) {
       e.preventDefault();
       let email = document.getElementById("email").value;
-      let rekening = document.getElementById("rekening").value;
+      let tujuan = document.getElementById("tujuan").value;
+      let rekening = document.getElementById("rekening") ? document.getElementById("rekening").value : "";
       let dollar = parseFloat(dollarInput.value);
 
       if (dollar < 2) {
@@ -83,13 +114,21 @@
       }
 
       let rupiah = dollar * rate;
-      let pesan = Halo kak, saya mau mencairkan saldo PayPal.\n\nEmail PayPal: ${email}\nTujuan: ${rekening}\nJumlah: $${dollar} = Rp${rupiah.toLocaleString("id-ID")}\n\nSudah saya transfer ke styzenstore@gmail.com;
-      let waLink = https://wa.me/6281232715307?text=${encodeURIComponent(pesan)};
 
+      let pesan = 
+`Halo kak, saya mau mencairkan saldo PayPal.
+----------------------------
+Email PayPal Pengirim: ${email}
+Tujuan: ${tujuan}
+Nomor: ${rekening}
+Jumlah: $${dollar} = Rp${rupiah.toLocaleString("id-ID")}
+----------------------------
+Sudah saya transfer ke PayPal: styzenstore@gmail.com`;
+
+      let waLink = https://wa.me/6281232715307?text=${encodeURIComponent(pesan)};
       window.open(waLink, "_blank");
     });
 
-    // Inisialisasi saat pertama kali load
     hitung();
   </script>
 </body>
