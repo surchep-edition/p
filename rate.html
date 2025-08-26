@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produk & Layanan - Saldoku</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-r from-black via-gray-900 to-black text-white">
+  <!-- Navbar -->
+  <nav class="fixed top-0 left-0 w-full bg-black/70 backdrop-blur-md p-4 flex justify-between items-center z-50">
+    <h1 class="text-xl font-bold text-yellow-400">Saldoku</h1>
+    <div class="space-x-4">
+      <a href="index.html" class="hover:text-yellow-400">Home</a>
+      <a href="produk.html" class="text-yellow-400 font-bold">Produk</a>
+      <a href="rate.html" class="hover:text-yellow-400">Rate</a>
+      <a href="faq.html" class="hover:text-yellow-400">FAQ</a>
+      <a href="kontak.html" class="hover:text-yellow-400">Kontak</a>
+      <a href="dashboard.html" class="bg-yellow-500 px-3 py-1 rounded-lg text-black font-bold hover:bg-yellow-400">Dashboard</a>
+    </div>
+  </nav>
+
+  <div class="pt-24 pb-12 max-w-5xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center text-yellow-400 mb-8">Produk & Layanan</h2>
+
+    <!-- Convert PayPal -->
+    <section data-aos="fade-up" class="bg-gray-800 p-6 rounded-2xl shadow-lg mb-10">
+      <h3 class="text-2xl font-bold mb-4 text-yellow-300">Convert PayPal ke Dana/OVO/GoPay/Bank</h3>
+      <form id="convertForm" class="space-y-4">
+        <input type="email" id="paypalEmail" placeholder="Email PayPal Anda" class="w-full p-3 rounded bg-gray-900 text-white" required>
+        <input type="number" id="usdAmount" placeholder="Jumlah USD (min 2)" min="2" class="w-full p-3 rounded bg-gray-900 text-white" required>
+        <select id="tujuan" class="w-full p-3 rounded bg-gray-900 text-white" required>
+          <option value="">Pilih Tujuan</option>
+          <option value="Dana">Dana</option>
+          <option value="OVO">OVO</option>
+          <option value="GoPay">GoPay</option>
+          <option value="Bank">Transfer Bank</option>
+        </select>
+        <input type="text" id="rekening" placeholder="Nomor Tujuan (Dana/Bank/OVO/GoPay)" class="w-full p-3 rounded bg-gray-900 text-white" required>
+        <p id="idrResult" class="text-yellow-300 font-bold"></p>
+        <button type="submit" class="w-full bg-yellow-500 text-black font-bold py-3 rounded-lg hover:bg-yellow-400">Proses Order</button>
+      </form>
+    </section>
+
+    <!-- Topup Pulsa -->
+    <section data-aos="fade-up" class="bg-gray-800 p-6 rounded-2xl shadow-lg mb-10">
+      <h3 class="text-2xl font-bold mb-4 text-yellow-300">Topup Pulsa via PayPal</h3>
+      <form class="space-y-4" onsubmit="return sendWhatsApp('Pulsa')">
+        <input type="text" id="pulsaNomor" placeholder="Nomor HP" class="w-full p-3 rounded bg-gray-900 text-white" required>
+        <input type="number" id="pulsaUsd" placeholder="Nominal USD (min 2)" min="2" class="w-full p-3 rounded bg-gray-900 text-white" required>
+        <button type="submit" class="w-full bg-yellow-500 text-black font-bold py-3 rounded-lg hover:bg-yellow-400">Proses Topup</button>
+      </form>
+    </section>
+
+    <!-- Topup GoPay -->
+    <section data-aos="fade-up" class="bg-gray-800 p-6 rounded-2xl shadow-lg mb-10">
+      <h3 class="text-2xl font-bold mb-4 text-yellow-300">Topup GoPay via PayPal</h3>
+      <form class="space-y-4" onsubmit="return sendWhatsApp('GoPay')">
+        <input type="text" id="gopayNomor" placeholder="Nomor GoPay" class="w-full p-3 rounded bg-gray-900 text-white" required>
+        <input type="number" id="gopayUsd" placeholder="Nominal USD (min 2)" min="2" class="w-full p-3 rounded bg-gray-900 text-white" required>
+        <button type="submit" class="w-full bg-yellow-500 text-black font-bold py-3 rounded-lg hover:bg-yellow-400">Proses Topup</button>
+      </form>
+    </section>
+
+    <!-- Topup FF -->
+    <section data-aos="fade-up" class="bg-gray-800 p-6 rounded-2xl shadow-lg">
+      <h3 class="text-2xl font-bold mb-4 text-yellow-300">Topup Free Fire via PayPal</h3>
+      <form class="space-y-4" onsubmit="return sendWhatsApp('Free Fire')">
+        <input type="text" id="ffId" placeholder="User ID Free Fire" class="w-full p-3 rounded bg-gray-900 text-white" required>
+        <input type="number" id="ffUsd" placeholder="Nominal USD (min 2)" min="2" class="w-full p-3 rounded bg-gray-900 text-white" required>
+        <button type="submit" class="w-full bg-yellow-500 text-black font-bold py-3 rounded-lg hover:bg-yellow-400">Proses Topup</button>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    AOS.init();
+
+    // Kurs default
+    const kurs = 13500;
+
+    // Convert PayPal
+    document.getElementById("usdAmount").addEventListener("input", function() {
+      let usd = parseFloat(this.value);
+      if (usd >= 2) {
+        document.getElementById("idrResult").innerText = "Total Diterima: Rp " + (usd * kurs).toLocaleString();
+      } else {
+        document.getElementById("idrResult").innerText = "";
+      }
+    });
+
+    document.getElementById("convertForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      let email = document.getElementById("paypalEmail").value;
+      let usd = document.getElementById("usdAmount").value;
+      let tujuan = document.getElementById("tujuan").value;
+      let rekening = document.getElementById("rekening").value;
+      let idr = usd * kurs;
+      let pesan = `Halo kak, saya mau convert PayPal
+Email PayPal: ${email}
+Jumlah: ${usd} USD (Rp${idr.toLocaleString()})
+Tujuan: ${tujuan}
+Nomor: ${rekening}`;
+      window.open(https://wa.me/6281232715307?text=${encodeURIComponent(pesan)}, "_blank");
+    });
+
+    // Topup (pulsa, gopay, ff)
+    function sendWhatsApp(service) {
+      let nomor = document.getElementById(service.toLowerCase() + "Nomor")?.value || document.getElementById("ffId")?.value;
+      let usd = document.getElementById(service.toLowerCase() + "Usd")?.value || document.getElementById("ffUsd")?.value;
+      let idr = usd * kurs;
+      let pesan = `Halo kak, saya mau Topup ${service}
+Nomor/ID: ${nomor}
+Jumlah: ${usd} USD (Rp${idr.toLocaleString()})`;
+      window.open(https://wa.me/6281232715307?text=${encodeURIComponent(pesan)}, "_blank");
+      return false;
+    }
+  </script>
+</body>
+</html>
