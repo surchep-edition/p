@@ -1,0 +1,263 @@
+<!-- index.html -->
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Saldoku — Convert PayPal & Topup via PayPal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{--accent:#f59e0b}
+    body{
+      background: radial-gradient(ellipse at 10% 10%, rgba(30,58,138,0.12), transparent 10%),
+                  radial-gradient(ellipse at 90% 90%, rgba(14,165,164,0.06), transparent 10%),
+                  linear-gradient(180deg,#030714,#071133 60%, #041028);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      min-height:100vh;
+    }
+    .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(6px); }
+    .glow { box-shadow: 0 6px 30px rgba(14,165,164,0.06); }
+    @keyframes floaty { 0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)} }
+  </style>
+</head>
+<body class="font-sans">
+
+  <!-- NAVBAR -->
+  <header class="fixed top-0 left-0 right-0 z-50">
+    <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between glass">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center font-bold">PP</div>
+        <div>
+          <div class="text-lg font-extrabold">Saldoku</div>
+          <div class="text-xs text-gray-300">Convert & Topup via PayPal</div>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center gap-6">
+        <a href="index.html" class="text-sm hover:text-white">Home</a>
+        <a href="produk.html" class="text-sm hover:text-white">Produk</a>
+        <a href="rate.html" class="text-sm hover:text-white">Rate</a>
+        <a href="faq.html" class="text-sm hover:text-white">FAQ</a>
+        <a href="kontak.html" class="text-sm hover:text-white">Kontak</a>
+        <a href="dashboard.html" class="px-3 py-2 rounded bg-[var(--accent)] text-black font-semibold">Dashboard</a>
+      </div>
+
+      <div class="md:hidden">
+        <a href="produk.html" class="px-3 py-2 rounded bg-[var(--accent)] text-black font-semibold">Order</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <main class="pt-28">
+    <section class="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-2 gap-8 items-center">
+      <div class="space-y-6">
+        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">Convert Saldo PayPal ke Dana, OVO, GoPay, atau Transfer Bank — Cepat & Aman</h1>
+        <p class="text-gray-300 max-w-xl">Cairkan saldo PayPal Anda dengan kurs bersaing. Minimal transaksi disarankan 2 USD. Chat langsung di WhatsApp untuk proses cepat.</p>
+
+        <div class="flex gap-3">
+          <a href="produk.html" class="px-6 py-3 bg-[var(--accent)] rounded-lg font-semibold text-black">Order Sekarang</a>
+          <a href="kontak.html" class="px-6 py-3 border border-gray-700 rounded-lg text-sm">Kontak</a>
+        </div>
+
+        <div class="mt-4 grid grid-cols-2 gap-3 max-w-md">
+          <div class="p-4 glass rounded-lg">
+            <div class="text-xs text-gray-300">Kurs Saat Ini</div>
+            <div class="text-2xl font-bold" id="rateDisplay">Rp 13.500</div>
+            <div class="text-xs text-gray-400 mt-1">1 USD = IDR</div>
+          </div>
+
+          <div class="p-4 glass rounded-lg">
+            <div class="text-xs text-gray-300">WhatsApp</div>
+            <div class="text-lg font-semibold">‪+62 812-3271-5307‬</div>
+            <div class="text-xs text-gray-400 mt-1">Klik untuk chat & order</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Order Card -->
+      <aside class="glass rounded-2xl p-6 glow">
+        <h3 class="font-bold text-xl mb-3">Quick Order — Convert PayPal</h3>
+        <p class="text-xs text-gray-300 mb-3">Masukkan email PayPal penerima & jumlah yang ingin dicairkan (USD). Sistem akan hitung estimasi IDR.</p>
+
+        <div class="space-y-3">
+          <label class="text-xs text-gray-300">Email PayPal (penerima)</label>
+          <input id="paypalEmail" class="w-full px-3 py-2 rounded bg-slate-900 text-white" placeholder="contoh: yourpaypal@email.com" />
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs text-gray-300">Jumlah (USD)</label>
+              <input id="usdQuick" type="number" min="2" step="0.01" class="w-full px-3 py-2 rounded bg-slate-900 text-white" placeholder="2.00" value="2" />
+              <div class="text-xs text-gray-400 mt-1">Minimum 2 USD</div>
+            </div>
+            <div>
+              <label class="text-xs text-gray-300">Pencairan</label>
+              <select id="payoutQuick" class="w-full px-3 py-2 rounded bg-slate-900 text-white">
+                <option>Transfer Bank</option>
+                <option>Dana</option>
+                <option>OVO</option>
+                <option>GoPay</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-300">Estimasi Terima (IDR)</label>
+            <div id="estimatedIDR" class="mt-2 text-lg font-semibold">Rp 27.000</div>
+          </div>
+
+          <div class="flex gap-3">
+            <button id="btnOrder" class="flex-1 px-4 py-2 rounded bg-[var(--accent)] text-black font-semibold hover:scale-105 transition">Proses Order (WhatsApp)</button>
+            <button id="btnCopy" class="px-3 py-2 rounded border border-gray-700 text-sm">Salin Pesan</button>
+          </div>
+
+          <p class="text-xs text-gray-400">Catatan: Pastikan transfer ke <span id="displayEmail" class="font-mono">yourpaypal@email.com</span>. Verifikasi server-side (IPN/Webhook) disarankan.</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Layanan (grid) -->
+    <section class="max-w-6xl mx-auto px-4 py-12">
+      <h2 class="text-3xl font-bold mb-6 text-center">Layanan Kami</h2>
+      <div class="grid md:grid-cols-4 gap-6">
+        <div class="p-6 glass rounded-lg hover:scale-105 transition">
+          <div class="text-lg font-semibold mb-2">Convert PayPal → Ewallet/Bank</div>
+          <div class="text-sm text-gray-300">Cairkan saldo PayPal ke Dana, OVO, GoPay atau Transfer Bank.</div>
+        </div>
+        <div class="p-6 glass rounded-lg hover:scale-105 transition">
+          <div class="text-lg font-semibold mb-2">Topup Pulsa</div>
+          <div class="text-sm text-gray-300">Topup pulsa untuk semua operator menggunakan saldo PayPal.</div>
+        </div>
+        <div class="p-6 glass rounded-lg hover:scale-105 transition">
+          <div class="text-lg font-semibold mb-2">Topup Game (FF,dll)</div>
+          <div class="text-sm text-gray-300">Diamond & item game via PayPal.</div>
+        </div>
+        <div class="p-6 glass rounded-lg hover:scale-105 transition">
+          <div class="text-lg font-semibold mb-2">Pembayaran Kartu</div>
+          <div class="text-sm text-gray-300">Layanan pembayaran kartu yang aman.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cara Kerja -->
+    <section class="max-w-6xl mx-auto px-4 py-12 bg-black/20 glass rounded-xl">
+      <h3 class="text-2xl font-bold mb-4 text-center">Cara Kerja</h3>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="p-4">
+          <h4 class="font-semibold mb-1">1. Pilih Layanan</h4>
+          <p class="text-sm text-gray-300">Pilih convert/topup dan isi form order.</p>
+        </div>
+        <div class="p-4">
+          <h4 class="font-semibold mb-1">2. Transfer PayPal</h4>
+          <p class="text-sm text-gray-300">Kirim saldo ke email PayPal yang tertera.</p>
+        </div>
+        <div class="p-4">
+          <h4 class="font-semibold mb-1">3. Konfirmasi & Cair</h4>
+          <p class="text-sm text-gray-300">Klik proses order, chat WA, tim kami akan verifikasi dan cairkan.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ singkat -->
+    <section class="max-w-6xl mx-auto px-4 py-12">
+      <h3 class="text-2xl font-bold mb-4 text-center">FAQ</h3>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="glass p-4 rounded">
+          <div class="font-semibold">Berapa minimal transaksi?</div>
+          <div class="text-sm text-gray-300">Disarankan minimal 2 USD agar proses lebih efisien.</div>
+        </div>
+        <div class="glass p-4 rounded">
+          <div class="font-semibold">Berapa lama proses?</div>
+          <div class="text-sm text-gray-300">Biasanya 5–30 menit setelah kami verifikasi pembayaran.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="max-w-6xl mx-auto px-4 py-8 text-center text-gray-400">
+      <div class="mb-3">WhatsApp: <a href="https://wa.me/6281232715307" class="text-white font-semibold">+62 812-3271-5307</a></div>
+      <div class="text-xs">© 2025 Saldoku — Gunakan dengan tanggung jawab. Pastikan verifikasi sebelum memproses pencairan.</div>
+    </footer>
+  </main>
+
+  <!-- SCRIPTS: GANTI nilai PAYPAL_EMAIL, WA_PHONE, RATE sesuai kebutuhan -->
+  <script>
+    // Konfigurasi (ganti di sini jika perlu)
+    const PAYPAL_EMAIL = "yourpaypal@email.com"; // <-- ganti dengan email PayPal Anda
+    const WA_PHONE = "6281232715307";            // <-- format internasional tanpa tanda +
+    const RATE = 13500;                          // 1 USD = RATE IDR
+
+    // Inisialisasi tampilan
+    document.getElementById('displayEmail').textContent = PAYPAL_EMAIL;
+    document.getElementById('rateDisplay').textContent = Rp ${new Intl.NumberFormat('id-ID').format(RATE)};
+
+    // Quick Order logic
+    const usdQuick = document.getElementById('usdQuick');
+    const estimatedIDR = document.getElementById('estimatedIDR');
+    const paypalEmailInput = document.getElementById('paypalEmail');
+
+    // default display: show configured paypal email
+    paypalEmailInput.value = PAYPAL_EMAIL;
+
+    function updateEstimate(){
+      const usd = parseFloat(usdQuick.value) || 0;
+      if (usd >= 2) {
+        const idr = Math.round(usd * RATE);
+        estimatedIDR.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(idr);
+      } else {
+        estimatedIDR.textContent = 'Minimal 2 USD';
+      }
+    }
+    usdQuick.addEventListener('input', updateEstimate);
+    updateEstimate();
+
+    // Build message for WhatsApp
+    function buildOrderMessage(){
+      const email = (paypalEmailInput.value || PAYPAL_EMAIL).trim();
+      const usd = parseFloat(usdQuick.value) || 0;
+      const payout = document.getElementById('payoutQuick').value;
+      if(usd < 2) { alert('Minimal 2 USD'); return null; }
+      const idr = Math.round(usd * RATE);
+      const trxCode = 'PP' + Math.random().toString(36).slice(2,9).toUpperCase();
+      const msg = [
+        'Halo KA, saya mau mencairkan saldo PayPal.',
+        Kode TRX: ${trxCode},
+        Email PayPal: ${email},
+        Jumlah: $${usd.toFixed(2)} (≈ Rp ${new Intl.NumberFormat('id-ID').format(idr)}),
+        Tujuan: ${payout},
+        '',
+        'Mohon proses ya, terima kasih.'
+      ].join('\\n');
+      return msg;
+    }
+
+    // Buttons
+    document.getElementById('btnOrder').addEventListener('click', () => {
+      const msg = buildOrderMessage();
+      if(!msg) return;
+      const url = https://wa.me/${WA_PHONE}?text=${encodeURIComponent(msg)};
+      window.open(url, '_blank');
+    });
+
+    document.getElementById('btnCopy').addEventListener('click', () => {
+      const msg = buildOrderMessage();
+      if(!msg) return;
+      navigator.clipboard?.writeText(msg).then(()=> alert('Pesan sukses disalin ke clipboard.')).catch(()=> prompt('Salin pesan manual:', msg));
+    });
+
+    // Optional: live feed sample (mock)
+    // (Anda bisa ganti / load via API nanti)
+    (function initMockFeed(){
+      const feed = [
+        '[2025-08-26 19:12] Andre beli $5 — Dana',
+        '[2025-08-26 18:59] Rani beli $2 — Transfer Bank',
+        '[2025-08-26 18:40] Dedi beli $10 — GoPay'
+      ];
+      // tidak ditampilkan di hero, bisa ditambahkan jika mau
+      console.log('Mock feed:', feed);
+    })();
+  </script>
+</body>
+</html>
